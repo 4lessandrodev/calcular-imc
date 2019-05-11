@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+    <!--<![endif]-->
+
+    <head>
+        <meta charset="utf-8">
+        <title>Calculadora</title>
+        <meta name="author" content="Alessandro L. Menezes">
+        <meta name="description" content="Meu primeiro codigo em javaScript">
+        <meta name="keywords"
+            content="sites, web, desenvolvimento, Dev, Codigo html, meu segundo codigo, javaScript, meu portfólio, front-End">
+        <link href="https://fonts.googleapis.com/css?family=Gugi" rel="stylesheet">
+        <style>
+            .body {
+                font-family: sans-serif;
+            }
+
+            .corpo-pagina {
+                background-color: #f5f5f5;
+                height: 96vh;
+                width: 99vw;
+            }
+
+            .header {
+                display: grid;
+                width: 40%;
+                margin: auto;
+                background-color: white;
+                padding-left: 2em;
+                font-size: 1.2em;
+                letter-spacing: .1em;
+            }
+
+            .header h1 {
+                font-size: 1.2em;
+                margin: 1em 0 0 0;
+                font-family: sans-serif;
+                color: rgb(15, 15, 99);
+            }
+
+            .header p {
+                margin-top: 0.2em;
+                padding-bottom: 1em;
+            }
+
+            .separador {
+                width: 40%;
+            }
+
+            .formulario {
+                display: grid;
+                width: 40%;
+                margin: auto;
+                background-color: white;
+                padding: 1.3em;
+            }
+
+            .formulario label {
+                padding: .6em 0;
+                font-size: 1em;
+                color: midnightblue;
+                margin-top: 1.2em;
+            }
+
+            .formulario input,
+            textarea {
+                padding: .9em;
+                border-radius: 5px;
+                background-color: #f5f5f5;
+            }
+
+            button {
+                height: 3.5em;
+                text-transform: uppercase;
+                margin-top: 0.9em;
+                border-radius: 5px;
+                font-size: .8em;
+                background-color: rgb(17, 48, 17);
+                color: white;
+            }
+
+            button:hover {
+                cursor: pointer;
+                background-color: rgb(32, 78, 32);
+            }
+
+            #autor {
+                text-align: center;
+            }
+        </style>
+    </head>
+
+    <body>
+        <main>
+            <section class="corpo-pagina">
+                <article>
+                    <header class="header">
+                        <h1>Calcular seu índice de massa corporal</h1>
+                        <p>Informe os valores abaixo para calcular</p>
+                    </header>
+                </article>
+                <hr class="separador">
+                <article class="formulario">
+                    <label title="peso">Informe seu peso em <abbr title="kilograma">KG</abbr></label>
+                    <input id="peso" type="number" name="peso" placeholder="89.50" min="1" required
+                        title="Campo obrigatório">
+                    <label title="altura">Informe sua altura em metros</label>
+                    <input id="altura" type="number" name="altura" placeholder="1.80" min="0.1" required
+                        title="Campo obrigatório">
+                    <label title="resultado">Resultado</label>
+                    <textarea id="resultado" name="resultado" cols="40" rows="5" disabled></textarea>
+                    <button onclick="calcularIMC()">Calcular</button>
+                </article>
+                <blockquote id="autor">
+                    <cite>Desenvolvido por Alessandro L. Menezes</cite>
+                </blockquote>
+            </section>
+        </main>
+        <script>
+            //Pedir foco no campo peso ao carregar a pagina
+            document.getElementById("peso").focus();
+
+            //Função atribuir valores para as variáveis
+            function calcularIMC() {
+
+                //Formula IMC = peso / altura^2
+
+                //Muito abaixo do peso 16 a 16,9 kg/m2
+                //Abaixo do peso 17 a 18,4 kg/m2
+                //Peso normal 18,5 a 24,9 kg/m2
+                //Acima do peso  25 a 29,9 kg/m2
+                //Obesidade Grau I 30 a 34,9/m2
+                //Obesidade Grau II 35 a 40 kg/m2
+                //Obesidade Grau IIi maior que 40kg/m2
+
+                var alt = document.getElementById('altura');
+                var pes = document.getElementById('peso');
+
+                //Converter os valores de texto para números
+                parseFloat(alt.value);
+                parseFloat(pes.value);
+
+                //Alerta caso os campos estejam vazios
+                if (alt.value == 0 || pes.value == 0) {
+                    alert('Preencher os valores obrigatórios');
+                    if (pes.value == 0) {
+                        document.getElementById("peso").focus();
+                    } else {
+                        document.getElementById("altura").focus();
+                    }
+                
+                //Caso os campos estejam preenchidos prosseguir com o calculo
+                } else {
+
+                    //Atribuir valor zerado a variável que receberá o resultado do cálculo
+                    var imc = 0;
+
+                    //Calcular resultado do IMC
+                    var imc = pes.value / (alt.value * alt.value);
+
+                    //Chamar função de validação de qual mensagem deve ser exibida ao usuário
+                    verificarValoresImc(imc.toFixed(2));
+                }
+
+            }
+            //Variavel global de mensagem a exibir
+            var msg = '';
+
+            //Funcao regras de mensagens de IMC a exibir para o usuário
+            function verificarValoresImc(x) {
+                if (x < 16.9) {
+                    msg = 'Muito abaixo do peso';
+                    imprimir('IMC: ' + x + ' - ' + msg);
+                } else if (x > 16.9 && x < 18.4) {
+                    msg = 'Abaixo do peso';
+                    imprimir('IMC: ' + x + ' - ' + msg);
+                } else if (x > 18.4 && x < 24.90) {
+                    msg = 'Peso normal';
+                    imprimir('IMC: ' + x + ' - ' + msg);
+                } else if (x > 24.90 && x < 29.90) {
+                    msg = 'Acima do peso';
+                    imprimir('IMC: ' + x + ' - ' + msg);
+                } else if (x > 29.90 && x < 34.90) {
+                    msg = 'Obesidade Grau I';
+                    imprimir('IMC: ' + x + ' - ' + msg);
+                } else if (x > 34.90 && x < 40) {
+                    msg = 'Obesidade Grau II';
+                    imprimir('IMC: ' + x + ' - ' + msg);
+                } else if (x > 40) {
+                    msg = 'Obesidade Grau III';
+                    imprimir('IMC: ' + x + ' - ' + msg);
+                } else {
+                    msg = 'Não foi possível calcular, tente novamente!';
+                    imprimir('IMC: ' + x + ' - ' + msg);
+                }
+            }
+
+            //Funcao imprimir mensagem na tela com o resultado do calculo do IMC
+            function imprimir(texto) {
+                document.querySelector('#resultado').innerHTML = texto;
+            }
+        </script>
+    </body>
+
+</html>
